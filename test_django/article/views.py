@@ -1,17 +1,18 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+from rest_framework.response import Response
 from .models import Article, Author
 from .serializers import ArticleSerializer
 
 
-class ArticleView(ListCreateAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+class ArticleView(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Article.objects.all()
+        serializer = ArticleSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        author = get_object_or_404(Author, id=self.request.data.get('author_id'))
-        return serializer.save(author=author)
-
-
-class SingleArticleView(RetrieveUpdateDestroyAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+    def retrieve(self, request, pk=None):
+        queryset = Article.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = ArticleSerializer(user)
+        return Response(serializer.data)
