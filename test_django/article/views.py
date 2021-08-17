@@ -28,3 +28,11 @@ class ArticleView(APIView):
             "success": "Article '{}' updated successfully".format(article_saved.title)
         })
 
+    def delete(self, request, pk):
+        article = get_object_or_404(Article.objects.all(), pk=pk)
+        article.delete()
+        return Response({
+            "message": "Article with id '{}' has been deleted".format(pk)
+        }, status=204)
+
+
