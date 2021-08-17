@@ -1,9 +1,9 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, get_object_or_404
 from .models import Article, Author
 from .serializers import ArticleSerializer
 
 
-class ArticleView(CreateAPIView, ListAPIView):
+class ArticleView(ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
